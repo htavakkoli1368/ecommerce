@@ -16,7 +16,7 @@ namespace Shoping
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            // builder.Services.AddAutoMapper(typeof(ShopingProfile));
+            //builder.Services.AddAutoMapper(typeof(ShopingProfile));
             builder.Services.AddScoped<IRegionRepository, SQLRegionRepository>();
             var app = builder.Build();
 

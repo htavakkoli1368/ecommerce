@@ -4,6 +4,16 @@ namespace Shoping.Repositories
 {
     public class InMemoryRegionRepository : IRegionRepository
     {
+        public Task<RegionModel> CreateAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<RegionModel> Delete()
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<List<RegionModel>> GetAllAsync()
         {
            return  new List<RegionModel>(){
@@ -22,6 +32,16 @@ namespace Shoping.Repositories
                     RegionImageUrl="http://test.com"
                 }
            };
+        }
+
+        public Task<RegionModel> GetByIdAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<RegionModel> Update()
+        {
+            throw new NotImplementedException();
         }
     }
 }
