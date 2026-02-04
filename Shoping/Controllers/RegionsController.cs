@@ -5,6 +5,7 @@ using Shoping.Data;
 using Shoping.Models.Domain;
 using Shoping.Models.DTO;
 using Shoping.Models.DTOs;
+using Shoping.Repositories;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
@@ -15,17 +16,19 @@ namespace Shoping.Controllers
     public class RegionsController : ControllerBase
     {
         private readonly ShopingContext Shcontext;
+        private readonly IRegionRepository regionRepository;
 
-        public RegionsController(ShopingContext shcontext)
+        public RegionsController(ShopingContext shcontext,IRegionRepository regionRepository)
         {
             Shcontext = shcontext;
+            this.regionRepository = regionRepository;
         }
 
  
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-         var regions =await Shcontext.Region.ToListAsync();
+         var regions =await regionRepository.GetAllAsync();
             return Ok(regions);           
         }
 

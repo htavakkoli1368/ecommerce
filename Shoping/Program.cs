@@ -2,7 +2,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Shoping.Data;
 using Shoping.MappingsProfiles;
- 
+using Shoping.Repositories;
+
 namespace Shoping
 {
     public class Program
@@ -15,7 +16,8 @@ namespace Shoping
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-           // builder.Services.AddAutoMapper(typeof(ShopingProfile));
+            // builder.Services.AddAutoMapper(typeof(ShopingProfile));
+            builder.Services.AddScoped<IRegionRepository, SQLRegionRepository>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
