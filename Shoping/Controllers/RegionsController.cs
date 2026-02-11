@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using RabbitMQ.Client;
 using Shoping.Data;
 using Shoping.Models.Domain;
 using Shoping.Models.DTO;
 using Shoping.Models.DTOs;
 using Shoping.Repositories;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
@@ -24,12 +26,40 @@ namespace Shoping.Controllers
             this.regionRepository = regionRepository;
         }
 
- 
+
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-         var regions =await regionRepository.GetAllAsync();
-            return Ok(regions);           
+            var regions = await regionRepository.GetAllAsync();
+            var factory = new ConnectionFactory
+            {
+                Uri = new Uri("amqp://guest:guest@localhost:5672")
+            };
+
+            await using var connection = await factory.CreateConnectionAsync();
+            await using var channel = await connection.CreateChannelAsync();
+            await channel.ExchangeDeclareAsync(
+                exchange: "firstlearning",
+                type: "direct",
+                durable: true
+                );
+            byte[] body = JsonSerializer.SerializeToUtf8Bytes(regions);
+            var pops = new BasicProperties { 
+                ContentType = "application/json",
+                DeliveryMode =DeliveryModes.Persistent
+                };
+            await channel.BasicPublishAsync(
+                exchange: "firstlearning",
+                routingKey:"",
+                mandatory:false,
+                basicProperties:pops,
+                body:body
+                
+                
+                
+                
+                );
+         return Ok(regions);           
         }
 
         [HttpGet]
